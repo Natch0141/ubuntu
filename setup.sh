@@ -54,20 +54,7 @@ service dropbear restart
 # install fail2ban
 apt-get -y install fail2ban;
 service fail2ban restart
-# blockir torrent
-iptables -A OUTPUT -p tcp --dport 6881:6889 -j DROP
-iptables -A OUTPUT -p udp --dport 1024:65534 -j DROP
-iptables -A FORWARD -m string --string "get_peers" --algo bm -j DROP
-iptables -A FORWARD -m string --string "announce_peer" --algo bm -j DROP
-iptables -A FORWARD -m string --string "find_node" --algo bm -j DROP
-iptables -A FORWARD -m string --algo bm --string "BitTorrent" -j DROP
-iptables -A FORWARD -m string --algo bm --string "BitTorrent protocol" -j DROP
-iptables -A FORWARD -m string --algo bm --string "peer_id=" -j DROP
-iptables -A FORWARD -m string --algo bm --string ".torrent" -j DROP
-iptables -A FORWARD -m string --algo bm --string "announce.php?passkey=" -j DROP
-iptables -A FORWARD -m string --algo bm --string "torrent" -j DROP
-iptables -A FORWARD -m string --algo bm --string "announce" -j DROP
-iptables -A FORWARD -m string --algo bm --string "info_hash" -j DROP
+
 #install webmin
 cd
 wget -O /etc/apt/sources.list "https://github.com/Natch0141/ubuntu/blob/master/source.list"
@@ -85,7 +72,16 @@ wget -O /etc/squid/squid.conf "https://raw.githubusercontent.com/Natch0141/ubunt
 sed -i 's/acl SSH dst/acl SSH dst $IP/g' /etc/squid/squid.conf
 service squid restart
 chkconfig squid on
-#downlosd
+#Block Torrent
+iptables -A FORWARD -m string --algo bm --string "BitTorrent" -j LOGDROP
+iptables -A FORWARD -m string --algo bm --string "BitTorrent protocol" -j LOGDROP
+iptables -A FORWARD -m string --algo bm --string "peer_id=" -j LOGDROP
+iptables -A FORWARD -m string --algo bm --string ".torrent" -j LOGDROP
+iptables -A FORWARD -m string --algo bm --string "announce.php?passkey=" -j LOGDROP
+iptables -A FORWARD -m string --algo bm --string "torrent" -j LOGDROP
+iptables -A FORWARD -m string --algo bm --string "announce" -j LOGDROP
+iptables -A FORWARD -m string --algo bm --string "info_hash" -j LOGDROP
+#download
 cd /usr/bin
 wget -O menu "https://raw.githubusercontent.com/Natch0141/ubuntu/master/menu.sh"
 wget -O user-add "https://raw.githubusercontent.com/Natch0141/ubuntu/master/user-add.sh"

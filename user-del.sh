@@ -1,6 +1,6 @@
 #!/bin/bash
 #Script untuk menghapus user
-
+clear
 read -p "Hapus User : " Pengguna
 
 if getent passwd $Pengguna > /dev/null 2>&1; then

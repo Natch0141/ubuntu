@@ -1,6 +1,6 @@
 #!/bin/bash
 #Script auto create user SSH
-
+clear
 read -p "Username : " Login
 read -p "Password : " Pass
 read -p "Expired (hari): " masaaktif
@@ -15,7 +15,6 @@ echo -e "=========-account-=========="
 echo -e "Host: $IP" 
 echo -e "Port OpenSSH : 22, 143"
 echo -e "Port Dropbear : 110, 109, 960"
-echo -e "Port squid : 3128, 8080"
 echo -e "Username: $Login "
 echo -e "Password: $Pass"
 echo -e "-----------------------------"
