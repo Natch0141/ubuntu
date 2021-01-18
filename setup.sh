@@ -49,27 +49,30 @@ sed -i 's/DROPBEAR_PORT=22/DROPBEAR_PORT=110/g' /etc/default/dropbear
 sed -i 's/DROPBEAR_EXTRA_ARGS=""/DROPBEAR_EXTRA_ARGS="-p 109 -p 960"/g' /etc/default/dropbear
 echo "/bin/false" >> /etc/shells
 echo "/usr/sbin/nologin" >> /etc/shells
-service ssh restart
-service dropbear restart
+service ssh restart && service dropbear restart
 # install fail2ban
-apt-get -y install fail2ban;
-service fail2ban restart
-
-#install webmin
-cd
-sed -i '$ a\\ndeb http://download.webmin.com/download/repository sarge contrib' /etc/apt/sources.list
-wget http://www.webmin.com/jcameron-key.asc
-apt-key add jcameron-key.asc
-apt-get update
-apt-get -y install webmin
-sed -i -e 's/ssl=1/ssl=0/g' /etc/webmin/miniserv.conf
-service webmin restart
+apt-get -y install fail2ban && service fail2ban restart
+#install stunmel
+apt-get -y install stunnel4
+wget -O /etc/stunnel/stunnel.pem "https://raw.githubusercontent/Natch0141/ubuntu/master/stunnel.pem"
+wget -O /etc/stunnel/stunnel.conf "https://raw.githubusercontent/Natch0141/ubuntu/master/stunnel.conf"
+sed -i $MYIP2 /etc/stunnel/stunnel.conf
+sed -i 's/ENABLED=0/ENABLED=1/g' /etc/default/stunnel4
+service stunnel4 restart
 #install squid
 cd
 apt-get -y install squid
 wget -O /etc/squid/squid.conf "https://raw.githubusercontent.com/Natch0141/ubuntu/master/squid.conf"
 sed -i $MYIP /etc/squid/squid.conf;
 service squid restart
+#install webmin
+cd
+sed -i '$ a\\ndeb http://download.webmin.com/download/repository sarge contrib' /etc/apt/sources.list
+wget http://www.webmin.com/jcameron-key.asc
+apt-key add jcameron-key.asc
+apt-get update && apt-get -y install webmin
+sed -i -e 's/ssl=1/ssl=0/g' /etc/webmin/miniserv.conf
+service webmin restart
 #download
 cd /usr/bin
 wget -O menu "https://raw.githubusercontent.com/Natch0141/ubuntu/master/menu.sh"
