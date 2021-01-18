@@ -56,7 +56,6 @@ apt-get -y install fail2ban && service fail2ban restart
 apt-get -y install stunnel4
 wget -O /etc/stunnel/stunnel.pem "https://raw.githubusercontent.com/Natch0141/ubuntu/master/stunnel.pem"
 wget -O /etc/stunnel/stunnel.conf "https://raw.githubusercontent.com/Natch0141/ubuntu/master/stunnel.conf"
-sed -i $MYIP2 /etc/stunnel/stunnel.conf
 sed -i 's/ENABLED=0/ENABLED=1/g' /etc/default/stunnel4
 service stunnel4 restart
 #install squid
