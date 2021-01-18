@@ -1,5 +1,5 @@
-OS='uname -m';
 IP=$(curl -s https://checkip.amazonaws.com)
+MYIP="s/xxxxxxxxx/$IP/g";
 #update&&upgrade latest package
 apt-get update && apt-get -y upgrade
 # go to root
@@ -32,7 +32,7 @@ echo "clear" >> .bash_profile
 echo "neofetch" >> .bash_profile
 #install badvpn/udpgw port default is 7300
 cd
-wget -O /usr/bin/badvpn-udpgw "http://evira.us/badvpn-udpgw64"
+wget -O /usr/bin/badvpn-udpgw "https://raw.githubusercontent.com/Natch0141/ubuntu/master/badvpn-udpgw64"
 sed -i '$ i\screen -dmS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300 --max-clients 1000' /etc/rc.local
 chmod +x /usr/bin/badvpn-udpgw
 screen -dmS updgw badvpn-udpgw --listen-addr 127.0.0.1:7300
@@ -68,7 +68,7 @@ service webmin restart
 cd
 apt-get -y install squid
 wget -O /etc/squid/squid.conf "https://raw.githubusercontent.com/Natch0141/ubuntu/master/squid.conf"
-sed -i 's/acl SSH dst/acl SSH dst $IP/g' /etc/squid/squid.conf
+sed -i $MYIP /etc/squid/squid.conf;
 service squid restart
 #download
 cd /usr/bin
