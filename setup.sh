@@ -35,18 +35,18 @@ cd
 wget -O /usr/bin/badvpn-udpgw "http://evira.us/badvpn-udpgw64"
 sed -i '$ i\screen -dmS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300 --max-clients 1000' /etc/rc.local
 chmod +x /usr/bin/badvpn-udpgw
-screen -dmS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300
+screen -dmS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300 -- max-clients 1000
 
 # setting port ssh
 cd
-sed -i 's/Port 22/Port 22/g' /etc/ssh/sshd_config
 sed -i '/Port 22/a Port 143' /etc/ssh/sshd_config
+sed -i 's/#Port 22/Port  22/g' /etc/ssh/sshd_config
 service ssh restart
 # install dropbear
 apt-get -y install dropbear
 sed -i 's/NO_START=1/NO_START=0/g' /etc/default/dropbear
 sed -i 's/DROPBEAR_PORT=22/DROPBEAR_PORT=110/g' /etc/default/dropbear
-sed -i 's/DROPBEAR_EXTRA_ARGS=/DROPBEAR_EXTRA_ARGS="-p 109 -p 960"/g' /etc/default/dropbear
+sed -i 's/DROPBEAR_EXTRA_ARGS=""/DROPBEAR_EXTRA_ARGS="-p 109 -p 960"/g' /etc/default/dropbear
 echo "/bin/false" >> /etc/shells
 echo "/usr/sbin/nologin" >> /etc/shells
 service ssh restart
@@ -57,22 +57,21 @@ service fail2ban restart
 
 #install webmin
 cd
-wget -O /etc/apt/sources.list "https://raw.githubusercontent.com/Natch0141/ubuntu/master/source.list"
+sed -i '$ a\\ndeb http://download.webmin.com/download/repository sarge contrib' /etc/apt/sources.list
 wget http://www.webmin.com/jcameron-key.asc
 apt-key add jcameron-key.asc
 apt-get update
 apt-get -y install webmin
 sed -i -e 's/ssl=1/ssl=0/g' /etc/webmin/miniserv.conf
 service webmin restart
-chkconfig webmin on
 #install squid
 cd
 apt-get -y install squid3
 wget -O /etc/squid/squid.conf "https://raw.githubusercontent.com/Natch0141/ubuntu/master/squid.conf"
 sed -i 's/acl SSH dst/acl SSH dst $IP/g' /etc/squid/squid.conf
 service squid restart
-chkconfig squid on
 #Block Torrent
+cd
 iptables -A FORWARD -m string --algo bm --string "BitTorrent" -j LOGDROP
 iptables -A FORWARD -m string --algo bm --string "BitTorrent protocol" -j LOGDROP
 iptables -A FORWARD -m string --algo bm --string "peer_id=" -j LOGDROP
@@ -87,8 +86,9 @@ wget -O menu "https://raw.githubusercontent.com/Natch0141/ubuntu/master/menu.sh"
 wget -O user-add "https://raw.githubusercontent.com/Natch0141/ubuntu/master/user-add.sh"
 wget -O user-del "https://raw.githubusercontent.com/Natch0141/ubuntu/master/user-del.sh"
 wget -O user-list "https://raw.githubusercontent.com/Natch0141/ubuntu/master/user-list.sh"
-wget -O user-log "https://github.com/Natch0141/ubuntu/blob/master/user-log.sh"
-wget -O speedtest "https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py"
+wget -O user-log "https://raw.githubusercontent.com/Natch0141/master/user-log.sh"
+wget -O speedtest "https://raw.githubusercontent.com/Natch/master/speedtest.py"
+wget -O resvis "https://raw.githubusercontent.com/Natch0141/ubuntu/master/resvis.sh"
 echo "0 0 * * * root /sbin/reboot" > /etc/cron.d/reboot
 #
 chmod +x menu
@@ -97,6 +97,7 @@ chmod +x user-del
 chmod +x user-list
 chmod +x user-log
 chmod +x speedtest
+chmod +x resvis
 #
 service cron restart
 service ssh restart
@@ -110,3 +111,4 @@ clear
 #success
 echo "behasil"
 rm -f /root/setup.sh
+menu
