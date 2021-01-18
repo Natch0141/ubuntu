@@ -7,6 +7,10 @@ echo "Restarting ssh....";
 /etc/init.d/ssh restart
 echo "Restarting dropbear...";
 /etc/init.d/dropbear restart
+echo "Restarting stunnel4...";
+/etc/init.d/stunnel restart
+echo "Restarting openvpn....";
+/etc/init.d/openvpn restart
 echo "Restarting squid...";
 /etc/init.d/squid restart
 echo "Restarting webmin...";

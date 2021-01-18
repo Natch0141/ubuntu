@@ -64,6 +64,35 @@ apt-get -y install squid
 wget -O /etc/squid/squid.conf "https://raw.githubusercontent.com/Natch0141/ubuntu/master/squid.conf"
 sed -i $MYIP /etc/squid/squid.conf;
 service squid restart
+# install webserver
+cd
+rm /etc/nginx/sites-enabled/default
+rm /etc/nginx/sites-available/default
+wget -O /etc/nginx/nginx.conf "https://raw.githubusercontent.com/Natch0141/ubuntu/master/nginx.conf"
+mkdir -p /home/vps/public_html
+echo "<pre>SETUP BY NATCH0141</pre>" > /home/vps/public_html/index.html
+wget -O /etc/nginx/conf.d/vps.conf "https://raw.githubusercontent.com/Natch0141/ubuntu/master/vps.conf"
+service nginx restart
+#
+wget -O /etc/openvpn/openvpn.tar "https://raw.githubusercontent.com/kholizsivoi/script/master/vpn.tar"
+cd /etc/openvpn/
+tar xf openvpn.tar
+rm -f /etc/openvpn/openvpn.tar
+wget -O /etc/openvpn/1194.conf "https://raw.githubusercontent.com/kholizsivoi/script/master/1194.conf"
+service openvpn restart
+sysctl -w net.ipv4.ip_forward=1
+sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
+iptables -t nat -I POSTROUTING -s 192.168.100.0/24 -o eth0 -j MASQUERADE
+iptables-save > /etc/iptables_set.conf
+wget -O /etc/network/if-up.d/iptables "https://raw.githubusercontent.com/kholizsivoi/script/master/iptables"
+chmod +x /etc/network/if-up.d/iptables
+service openvpn restart
+
+# konfigurasi openvpn
+cd /etc/openvpn/
+wget -O /etc/openvpn/client.ovpn "https://raw.githubusercontent.com/kholizsivoi/script/master/client-1194.conf"
+sed -i $MYIP /etc/openvpn/client.ovpn;
+cp client.ovpn /home/vps/public_html/
 #install webmin
 cd
 sed -i '$ a\\ndeb http://download.webmin.com/download/repository sarge contrib' /etc/apt/sources.list
