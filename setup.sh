@@ -57,7 +57,7 @@ service fail2ban restart
 
 #install webmin
 cd
-wget -O /etc/apt/sources.list "https://github.com/Natch0141/ubuntu/blob/master/source.list"
+wget -O /etc/apt/sources.list "https://raw.githubusercontent.com/Natch0141/ubuntu/master/source.list"
 wget http://www.webmin.com/jcameron-key.asc
 apt-key add jcameron-key.asc
 apt-get update
