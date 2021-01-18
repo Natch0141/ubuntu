@@ -77,7 +77,7 @@ wget -O user-add "https://raw.githubusercontent.com/Natch0141/ubuntu/master/user
 wget -O user-del "https://raw.githubusercontent.com/Natch0141/ubuntu/master/user-del.sh"
 wget -O user-list "https://raw.githubusercontent.com/Natch0141/ubuntu/master/user-list.sh"
 wget -O user-log "https://raw.githubusercontent.com/Natch0141/ubuntu/master/user-log.sh"
-wget -O speedtest "https://raw.githubusercontent.com/Natch/ubuntu/master/speedtest.py"
+wget -O speedtest "https://raw.githubusercontent.com/Natch0141/ubuntu/master/speedtest.py"
 wget -O resvis "https://raw.githubusercontent.com/Natch0141/ubuntu/master/resvis.sh"
 echo "0 0 * * * root /sbin/reboot" > /etc/cron.d/reboot
 #
