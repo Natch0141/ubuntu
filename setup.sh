@@ -35,7 +35,7 @@ cd
 wget -O /usr/bin/badvpn-udpgw "http://evira.us/badvpn-udpgw64"
 sed -i '$ i\screen -dmS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300 --max-clients 1000' /etc/rc.local
 chmod +x /usr/bin/badvpn-udpgw
-screen -dmS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300 -- max-clients 1000
+screen -dmS updgw badvpn-udpgw --listen-addr 127.0.0.1:7300
 
 # setting port ssh
 cd
@@ -66,28 +66,18 @@ sed -i -e 's/ssl=1/ssl=0/g' /etc/webmin/miniserv.conf
 service webmin restart
 #install squid
 cd
-apt-get -y install squid3
+apt-get -y install squid
 wget -O /etc/squid/squid.conf "https://raw.githubusercontent.com/Natch0141/ubuntu/master/squid.conf"
 sed -i 's/acl SSH dst/acl SSH dst $IP/g' /etc/squid/squid.conf
 service squid restart
-#Block Torrent
-cd
-iptables -A FORWARD -m string --algo bm --string "BitTorrent" -j LOGDROP
-iptables -A FORWARD -m string --algo bm --string "BitTorrent protocol" -j LOGDROP
-iptables -A FORWARD -m string --algo bm --string "peer_id=" -j LOGDROP
-iptables -A FORWARD -m string --algo bm --string ".torrent" -j LOGDROP
-iptables -A FORWARD -m string --algo bm --string "announce.php?passkey=" -j LOGDROP
-iptables -A FORWARD -m string --algo bm --string "torrent" -j LOGDROP
-iptables -A FORWARD -m string --algo bm --string "announce" -j LOGDROP
-iptables -A FORWARD -m string --algo bm --string "info_hash" -j LOGDROP
 #download
 cd /usr/bin
 wget -O menu "https://raw.githubusercontent.com/Natch0141/ubuntu/master/menu.sh"
 wget -O user-add "https://raw.githubusercontent.com/Natch0141/ubuntu/master/user-add.sh"
 wget -O user-del "https://raw.githubusercontent.com/Natch0141/ubuntu/master/user-del.sh"
 wget -O user-list "https://raw.githubusercontent.com/Natch0141/ubuntu/master/user-list.sh"
-wget -O user-log "https://raw.githubusercontent.com/Natch0141/master/user-log.sh"
-wget -O speedtest "https://raw.githubusercontent.com/Natch/master/speedtest.py"
+wget -O user-log "https://raw.githubusercontent.com/Natch0141/ubuntu/master/user-log.sh"
+wget -O speedtest "https://raw.githubusercontent.com/Natch/ubuntu/master/speedtest.py"
 wget -O resvis "https://raw.githubusercontent.com/Natch0141/ubuntu/master/resvis.sh"
 echo "0 0 * * * root /sbin/reboot" > /etc/cron.d/reboot
 #
@@ -102,7 +92,7 @@ chmod +x resvis
 service cron restart
 service ssh restart
 service dropbear restart
-service squid3 restart
+service squid restart
 service fail2ban restart
 service webmin restart
 rm -rf ~/.bash_history && history -c
